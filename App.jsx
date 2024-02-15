@@ -3,12 +3,8 @@ import { StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Text>Hello World testing</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <h1>heloo</h1>
+  )
 }
 
 const styles = StyleSheet.create({
