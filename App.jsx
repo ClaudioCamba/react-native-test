@@ -4,12 +4,48 @@ import * as React from "react";
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import CustomButton from './CustomButton';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore, collection, getDocs } from 'firebase/firestore'
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDXpRHjdI5m2eHn1WXC6qQcZiz39rqzqSQ",
+  authDomain: "spud-test-785d0.firebaseapp.com",
+  projectId: "spud-test-785d0",
+  storageBucket: "spud-test-785d0.appspot.com",
+  messagingSenderId: "439052179929",
+  appId: "1:439052179929:web:d98a815f0771bd1f5021c8",
+  measurementId: "G-F383HTRPMB"
+};
+
+// Initialize Firebase app
+initializeApp(firebaseConfig);
+// init services
+const db = getFirestore()
+// collection ref
+const colRef = collection(db, 'pizza')
+
+function getData() {
+  return getDocs(colRef)
+    .then((snapshot) => {
+      let pizzas = []
+      snapshot.docs.forEach((doc) => {
+        pizzas.push({ ...doc.data(), id: doc.id })
+      })
+      return pizzas
+    }).catch((err) => {
+      console.log(err);
+    })
+}
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
   return (
     //           <View style={styles.container}>
     //   <Text>Hello</Text>
@@ -37,6 +73,20 @@ export default function App() {
 }
 
 const HomeScreen = ({navigation}) => {
+
+  const [taste, setTaste] = useState([])
+
+  useEffect(()=> {
+    getData().then((piz)=>{
+      const allTaste = piz.map((item)=>{
+        if (item.vegan === true)
+    return <Text key={item.taste}>{item.taste}</Text>
+      })
+      setTaste(allTaste)
+      console.log(allTaste);
+    })
+},[])
+
   return (
     <>
     <Button
@@ -51,9 +101,16 @@ const HomeScreen = ({navigation}) => {
       navigation.navigate('About', {page: 'About'})
     }
   />
-  <CustomButton />
-    </>
-  );
+  <CustomButton 
+   onPress={() =>
+    navigation.navigate('About', {page: 'About'})
+  }    
+  />
+  
+  <Text>Potato</Text>
+  <View>{taste}</View>
+
+  </>);
 };
 const ProfileScreen = ({navigation, route}) => {
       const [groceryItem, setGroceryItem] = useState('');
