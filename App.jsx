@@ -1,17 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Text, Button} from 'react-native';
+import ClickButton from './Button'
 
 export default function App() {
   return (
-    <h1>heloo</h1>
+    <View style={styles.container}>
+      <Text>Hello</Text>
+      <Text style={styles.text}>heloo</Text>
+      <ClickButton />
+    </View>
   )
 }
 
+// React Native Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
+  text: {
+    color: '#F2590C',
+  }
 });
